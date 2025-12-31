@@ -6,14 +6,11 @@ spring:
     username: root
     password: ${DB_PASSWORD}
 
-stripe:
-  apiUrl: https://api.stripe.com
-  timeout: 1000
-  enabled: true
-  supported-currencies: USD, EUR, CAD
 
-payment-gateway: paypal
 
-database-type: in-memory
 
-notification-type: email
+
+
+
+
+
