@@ -1,9 +1,11 @@
 package com.zk.store.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Setter
 @Getter
 @Entity
@@ -25,4 +27,9 @@ public class Address
 
     @Column(name = "state")
     private String state;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private User user;
 }
