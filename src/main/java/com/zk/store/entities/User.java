@@ -9,9 +9,9 @@ import java.util.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "users")
+@Builder
 public class User
 {
     @Id
@@ -28,8 +28,9 @@ public class User
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    @ToString.Exclude
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+
     private List<Address> addresses = new ArrayList<>();
 
     @ManyToMany
@@ -38,10 +39,10 @@ public class User
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    @ToString.Exclude
+
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Profile profile;
 
     @ManyToMany
@@ -50,8 +51,13 @@ public class User
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @ToString.Exclude
-    private Set<Product> wishlist = new HashSet<>();
+
+    private Set<Product> favouriteProducts = new HashSet<>();
+
+    public void addFavouriteProduct(Product product)
+    {
+        favouriteProducts.add(product);
+    }
 
     public void addAddress(Address address)
     {
@@ -75,14 +81,21 @@ public class User
     public void removeTag(String tagName)
     {
         Iterator<Tag> it = tags.iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             Tag tag = it.next();
-            if (tag.getName().equals(tagName))
-            {
+            if (tag.getName().equals(tagName)) {
                 it.remove();
                 tag.getUsers().remove(this);
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "name = " + name + ", " +
+                "email = " + email + ")";
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+
 @SpringBootApplication
 public class StoreApplication
 {
@@ -12,6 +13,5 @@ public class StoreApplication
     {
         ApplicationContext context = SpringApplication.run(StoreApplication.class, args);
         var repository = context.getBean(UserService.class);
-        repository.showEntityStates();
     }
 }
